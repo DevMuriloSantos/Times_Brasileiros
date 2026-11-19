@@ -1,25 +1,25 @@
 :root {
   /* Identidade principal */
-  --verde: #0b5d3b;
-  --verde-escuro: #073b29;
-  --verde-claro: #159463;
+  --verde-gramado: #176b46;
+  --verde-profundo: #10432f;
+  --verde-vivo: #2e9b63;
 
   /* Informação / categorias */
-  --azul: #285ea8;
-  --azul-escuro: #1d477f;
+  --azul-apoio: #28658a;
+  --azul-profundo: #1b4968;
 
   /* Destaque / futebol / conquistas */
-  --dourado: #f2b63d;
-  --dourado-claro: #ffd36a;
+  --dourado-trofeu: #e0a72e;
+  --dourado-claro: #f2c85b;
 
   /* Neutros */
   --branco: #ffffff;
-  --cinza-bg: #f3f6f7;
-  --cinza-texto: #61716b;
+  --fundo-neutro: #f1f5f1;
+  --texto-secundario: #66746b;
 
   /* Sistema visual */
-  --sombra-suave: 0 4px 18px rgba(7, 59, 41, 0.08);
-  --sombra-card: 0 8px 28px rgba(7, 59, 41, 0.12);
+  --sombra-leve: 0 4px 18px rgba(16, 67, 47, 0.08);
+  --sombra-elevada: 0 8px 28px rgba(16, 67, 47, 0.12);
 
   --radius: 16px;
 }
@@ -33,7 +33,7 @@ html {
 }
 
 body {
-  background-color: var(--cinza-bg);
+  background-color: var(--fundo-neutro);
   font-family:
     "Segoe UI",
     "Inter",
@@ -55,9 +55,9 @@ main {
 .navbar-futebol {
   background: linear-gradient(
     100deg,
-    var(--verde-escuro) 0%,
-    var(--verde) 55%,
-    var(--verde-claro) 130%
+    var(--verde-profundo) 0%,
+    var(--verde-gramado) 55%,
+    var(--verde-vivo) 130%
   );
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.18);
 }
@@ -74,8 +74,8 @@ main {
 .navbar-logo {
   width: 44px;
   height: 44px;
-  background: var(--dourado);
-  color: var(--verde-escuro);
+  background: var(--dourado-trofeu);
+  color: var(--verde-profundo);
   border-radius: 12px;
   display: grid;
   place-items: center;
@@ -95,7 +95,7 @@ main {
   position: relative;
   background:
     linear-gradient(rgba(13, 58, 115, 0.78), rgba(15, 81, 50, 0.82)),
-    url("../img/hero-futebol.png") center/cover no-repeat;
+    url("../img/hero-futebol.jpg") center/cover no-repeat;
   color: #fff;
   padding: 3.5rem 0;
   border-radius: 0 0 28px 28px;
@@ -115,8 +115,8 @@ main {
 }
 
 .hero .badge-dourado {
-  background: var(--dourado);
-  color: var(--verde-escuro);
+  background: var(--dourado-trofeu);
+  color: var(--verde-profundo);
   font-weight: 700;
   padding: 0.45rem 0.9rem;
   border-radius: 30px;
@@ -142,7 +142,7 @@ main {
 .search-card {
   background: #fff;
   border-radius: var(--radius);
-  box-shadow: var(--sombra-card);
+  box-shadow: var(--sombra-elevada);
   padding: 1.1rem 1.3rem;
   margin-top: -2.2rem;
   position: relative;
@@ -156,12 +156,12 @@ main {
 }
 
 .search-card .form-control:focus {
-  border-color: var(--verde-claro);
+  border-color: var(--verde-vivo);
   box-shadow: 0 0 0 0.2rem rgba(46, 163, 106, 0.18);
 }
 
 .btn-verde {
-  background: var(--verde);
+  background: var(--verde-gramado);
   border: none;
   color: #fff;
   font-weight: 600;
@@ -169,34 +169,34 @@ main {
   transition: all 0.2s ease;
 }
 .btn-verde:hover {
-  background: var(--verde-escuro);
+  background: var(--verde-profundo);
   color: #fff;
   transform: translateY(-2px);
   box-shadow: 0 6px 16px rgba(15, 81, 50, 0.3);
 }
 
 .btn-incluir {
-  background: var(--dourado);
+  background: var(--dourado-trofeu);
   border: none;
-  color: var(--verde-escuro);
+  color: var(--verde-profundo);
   font-weight: 700;
   border-radius: 12px;
   transition: all 0.2s ease;
 }
 .btn-incluir:hover {
   background: var(--dourado-claro);
-  color: var(--verde-escuro);
+  color: var(--verde-profundo);
   transform: translateY(-2px);
   box-shadow: 0 6px 16px rgba(224, 168, 46, 0.4);
 }
 
 .btn-azul {
-  background: var(--azul);
+  background: var(--azul-apoio);
   border: none;
   color: #fff;
 }
 .btn-azul:hover {
-  background: var(--azul-escuro);
+  background: var(--azul-profundo);
   color: #fff;
 }
 
@@ -204,7 +204,7 @@ main {
   background: #fff;
   border-radius: var(--radius);
   padding: 1.4rem;
-  box-shadow: var(--sombra-suave);
+  box-shadow: var(--sombra-leve);
   border: 1px solid #eef1f4;
   transition: all 0.25s ease;
   height: 100%;
@@ -214,7 +214,7 @@ main {
 }
 .stat-card:hover {
   transform: translateY(-4px);
-  box-shadow: var(--sombra-card);
+  box-shadow: var(--sombra-elevada);
 }
 
 .stat-icon {
@@ -228,13 +228,17 @@ main {
   color: #fff;
 }
 .stat-icon.verde {
-  background: linear-gradient(135deg, var(--verde-claro), var(--verde));
+  background: linear-gradient(135deg, var(--verde-vivo), var(--verde-gramado));
 }
 .stat-icon.azul {
-  background: linear-gradient(135deg, #2f76d6, var(--azul));
+  background: linear-gradient(135deg, #2f76d6, var(--azul-apoio));
 }
 .stat-icon.dourado {
-  background: linear-gradient(135deg, var(--dourado-claro), var(--dourado));
+  background: linear-gradient(
+    135deg,
+    var(--dourado-claro),
+    var(--dourado-trofeu)
+  );
 }
 .stat-icon.cinza {
   background: linear-gradient(135deg, #8a98a3, #5b6770);
@@ -247,7 +251,7 @@ main {
   color: #1f2a30;
 }
 .stat-card .stat-label {
-  color: var(--cinza-texto);
+  color: var(--texto-secundario);
   font-size: 0.85rem;
   margin: 0;
 }
@@ -255,7 +259,7 @@ main {
 .tabela-card {
   background: #fff;
   border-radius: var(--radius);
-  box-shadow: var(--sombra-suave);
+  box-shadow: var(--sombra-leve);
   overflow: hidden;
   border: 1px solid #eef1f4;
 }
@@ -266,7 +270,7 @@ main {
 }
 
 .tabela-card thead th {
-  background: var(--verde-escuro);
+  background: var(--verde-profundo);
   color: #fff;
   font-weight: 600;
   font-size: 0.82rem;
@@ -345,34 +349,38 @@ main {
   filter: brightness(1.08);
 }
 .btn-ver {
-  background: var(--azul);
+  background: var(--azul-apoio);
 }
 .btn-editar {
-  background: var(--dourado);
-  color: var(--verde-escuro);
+  background: var(--dourado-trofeu);
+  color: var(--verde-profundo);
 }
 .btn-apagar {
   background: #c0392b;
 }
 
 .breadcrumb-item a {
-  color: var(--verde);
+  color: var(--verde-gramado);
   text-decoration: none;
   font-weight: 600;
 }
 .breadcrumb-item.active {
-  color: var(--cinza-texto);
+  color: var(--texto-secundario);
 }
 
 .form-card {
   background: #fff;
   border-radius: var(--radius);
-  box-shadow: var(--sombra-card);
+  box-shadow: var(--sombra-elevada);
   border: 1px solid #eef1f4;
   overflow: hidden;
 }
 .form-card .form-header {
-  background: linear-gradient(100deg, var(--verde-escuro), var(--verde));
+  background: linear-gradient(
+    100deg,
+    var(--verde-profundo),
+    var(--verde-gramado)
+  );
   color: #fff;
   padding: 1.3rem 1.6rem;
 }
@@ -397,7 +405,7 @@ main {
 }
 .form-control:focus,
 .form-select:focus {
-  border-color: var(--verde-claro);
+  border-color: var(--verde-vivo);
   box-shadow: 0 0 0 0.2rem rgba(46, 163, 106, 0.18);
 }
 
@@ -414,18 +422,18 @@ main {
   transition: border-color 0.2s ease;
 }
 .preview-box:hover {
-  border-color: var(--verde-claro);
+  border-color: var(--verde-vivo);
 }
 .preview-box img {
   max-width: 100%;
   max-height: 220px;
   border-radius: 12px;
   object-fit: cover;
-  box-shadow: var(--sombra-suave);
+  box-shadow: var(--sombra-leve);
 }
 
 .btn-cadastrar {
-  background: var(--verde);
+  background: var(--verde-gramado);
   border: none;
   color: #fff;
   font-weight: 700;
@@ -435,7 +443,7 @@ main {
   transition: all 0.2s ease;
 }
 .btn-cadastrar:hover {
-  background: var(--verde-escuro);
+  background: var(--verde-profundo);
   color: #fff;
   transform: translateY(-2px);
   box-shadow: 0 8px 20px rgba(15, 81, 50, 0.35);
@@ -452,7 +460,7 @@ main {
   font-size: 0.8rem;
   text-transform: uppercase;
   letter-spacing: 0.4px;
-  color: var(--cinza-texto);
+  color: var(--texto-secundario);
   font-weight: 600;
 }
 .info-valor {
@@ -464,12 +472,12 @@ main {
 .visualizar-img {
   width: 100%;
   border-radius: var(--radius);
-  box-shadow: var(--sombra-card);
+  box-shadow: var(--sombra-elevada);
   object-fit: cover;
 }
 
 .footer-institucional {
-  background: var(--verde-escuro);
+  background: var(--verde-profundo);
   color: #d7e6dd;
   padding: 2rem 0 1.2rem;
   margin-top: 3.5rem;
@@ -489,7 +497,7 @@ main {
 .empty-state {
   text-align: center;
   padding: 3rem 1rem;
-  color: var(--cinza-texto);
+  color: var(--texto-secundario);
 }
 .empty-state i {
   font-size: 3rem;

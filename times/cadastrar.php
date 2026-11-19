@@ -1,8 +1,8 @@
+<?php
+include "function.php"; // primeiro: inicia a sessão antes de qualquer saída HTML
+?>
 <!DOCTYPE html>
 <html lang="pt-BR">
-<?php
-include "function.php";
-?>
 
 <head>
   <meta charset="UTF-8" />
@@ -20,15 +20,15 @@ include HEADER_TEMPLATE;
 try {
   add();
 } catch (Exception $e) {
-  $_SESSION["message"] = "Erro ao cadastrar o time: " . $e->getMessage();
-  $_SESSION["type"] = "danger";
+  definir_msg("Erro ao cadastrar o time: " . $e->getMessage(), "danger");
 }
-if (!empty($_SESSION['message'])):
+$msg = obter_msg(); // exibe uma única vez: obter_msg() remove a mensagem da sessão
+if ($msg):
   ?>
 
   <body>
-    <div class="alert alert-<?= $_SESSION['type'] ?> container alertBox alert-dismissible fade show" role="alert">
-      <h2><?= $_SESSION['message'] ?></h2>
+    <div class="alert alert-<?= e($msg['tipo']) ?> container alertBox alert-dismissible fade show" role="alert">
+      <h2><?= e($msg['texto']) ?></h2>
       <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
       <a href="<?= BASEURL ?>index.php" class="btn btn-primary">Voltar</a>
     </div>
@@ -53,6 +53,7 @@ if (!empty($_SESSION['message'])):
           <div class="form-body">
             <form id="formCadastro" action="cadastrar.php" novalidate enctype="multipart/form-data"
               class="needs-validation" method="post">
+              <?= csrf_campo() ?>
               <div class="row g-4">
                 <div class="col-lg-7">
                   <div class="mb-3">

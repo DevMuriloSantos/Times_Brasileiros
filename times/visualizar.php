@@ -1,9 +1,8 @@
+<?php
+include("function.php"); // primeiro: inicia a sessão antes de qualquer saída HTML
+?>
 <!DOCTYPE html>
 <html lang="pt-BR">
-
-<?php
-include("function.php");
-?>
 
 <head>
   <meta charset="UTF-8" />
@@ -30,23 +29,20 @@ include("function.php");
 
     if ($time != null) {
 
-      $nome = $time->nome;
-      $dataFormatFundacao = formatData($time->dataFundacao, "d/m/Y");
-      $dataFormatCadastro = formatData($time->dataCadastro, "d/m/Y");
-      $estado = $time->estado;
-      $divisao = $time->divisao;
-
-      if (empty($time->foto)) {
-        $foto = "placeholder-time.png";
-      } else {
-        $foto = $time->foto;
-      }
+      // Todo valor vindo do banco é escapado (e()) antes de entrar no HTML, inclusive nos atributos
+      $nome = e($time->nome);
+      $dataFormatFundacao = e(formatData($time->dataFundacao, "d/m/Y"));
+      $dataFormatCadastro = e(formatData($time->dataCadastro, "d/m/Y"));
+      $estado = e($time->estado);
+      $divisao = e($time->divisao);
+      $foto = e(foto_time($time->foto));
     } else {
       throw new Exception("Time não encontrado!");
     }
   } catch (Exception $e) {
-    $_SESSION["message"] = "Erro ao buscar o time: " . $e->getMessage();
-    $_SESSION["type"] = "danger";
+    // Esta página exibe o erro abaixo, usando $e. Descarta qualquer mensagem registrada na
+    // sessão (ex.: por find()) para que não apareça depois em outra página.
+    obter_msg();
   }
 
   include HEADER_TEMPLATE;
@@ -90,7 +86,7 @@ include("function.php");
                     <div class=\"info-item d-flex justify-content-between\">
                       <div>
                         <div class=\"info-label\">Identificador</div>
-                        <div class=\"info-valor\"># $id</div>
+                        <div class=\"info-valor\"># " . e($id) . "</div>
                       </div>
                       <span class=\"badge-divisao badge-serie-$divisao align-self-center\">
                         Série $divisao
@@ -119,7 +115,7 @@ include("function.php");
                     <div class=\"d-flex gap-2 mt-4 pt-2 border-top\">
                       <a href=\"../index.php\" class=\"btn btn-light rounded-3 flex-fill\"><i
                           class=\"bi bi-arrow-left me-1\"></i>Voltar</a>
-                      <a href=\"editar.php?id=" . base64_encode($id) . "\" class=\"btn btn-incluir rounded-3 flex-fill\"><i
+                      <a href=\"editar.php?id=" . e(base64_encode($id)) . "\" class=\"btn btn-incluir rounded-3 flex-fill\"><i
                           class=\"bi bi-pencil-fill me-1\"></i>Editar</a>
                     </div>
                   </div>

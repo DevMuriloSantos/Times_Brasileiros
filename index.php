@@ -4,6 +4,7 @@
 <?php
   include("config.php");
   include("inc/database.php");
+  require_once ABSPATH . 'inc/sessao.php'; // só para e() (escape de saída); esta página não inicia sessão
 ?>
 
 <head>
@@ -61,7 +62,7 @@
     echo "
         <div class=\"alert alert-danger alert-dismissible fade show rounded-3 shadow-sm position-fixed errorBox\" role=\"alert\">
           <i class=\"bi bi-x-circle-fill me-2\"></i>
-          <strong>Erro ao buscar dados: {$e->getMessage()}</strong>
+          <strong>Erro ao buscar dados: " . e($e->getMessage()) . "</strong>
           <button type=\"button\" class=\"btn-close\" data-bs-dismiss=\"alert\" aria-label=\"Fechar\"></button>
         </div>
       ";
@@ -74,7 +75,7 @@
         <div class="stat-card">
           <div class="stat-icon verde"><i class="bi bi-people-fill"></i></div>
           <div>
-            <div class="stat-valor" id="statTotal"><?php echo $totalTimes ?? "0"; ?></div>
+            <div class="stat-valor" id="statTotal"><?= e($totalTimes ?? "0") ?></div>
             <p class="stat-label">Total de Times</p>
           </div>
         </div>
@@ -85,7 +86,7 @@
             <i class="bi bi-award-fill"></i>
           </div>
           <div>
-            <div class="stat-valor" id="statSerieA"><?php echo $totalSerieA ?? "0"; ?></div>
+            <div class="stat-valor" id="statSerieA"><?= e($totalSerieA ?? "0") ?></div>
             <p class="stat-label">Times da Série A</p>
           </div>
         </div>
@@ -94,7 +95,7 @@
         <div class="stat-card">
           <div class="stat-icon azul"><i class="bi bi-trophy"></i></div>
           <div>
-            <div class="stat-valor" id="statSerieB"><?php echo $totalSerieB ?? "0"; ?></div>
+            <div class="stat-valor" id="statSerieB"><?= e($totalSerieB ?? "0") ?></div>
             <p class="stat-label">Times da Série B</p>
           </div>
         </div>
@@ -105,7 +106,7 @@
             <i class="bi bi-clock-history"></i>
           </div>
           <div>
-            <div class="stat-valor fs-5" id="statUltimo"><?php echo $ultimoCadastro ?? "-"; ?></div>
+            <div class="stat-valor fs-5" id="statUltimo"><?= e($ultimoCadastro ?? "-") ?></div>
             <p class="stat-label">Último Cadastrado</p>
           </div>
         </div>
@@ -162,7 +163,7 @@
   </footer>
 
   <script src="<?= BASEURL ?>assets/js/bootstrap.bundle.min.js"></script>
-  <script src="<?= BASEURL ?>assets/js/util.js?v=2"></script>
+  <script src="<?= BASEURL ?>assets/js/util.js?v=3"></script>
 </body>
 
 </html>

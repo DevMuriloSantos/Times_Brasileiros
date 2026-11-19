@@ -1,9 +1,8 @@
+<?php
+include "function.php"; // primeiro: inicia a sessão antes de qualquer saída HTML
+?>
 <!doctype html>
 <html lang="pt-BR">
-
-<?php
-include "function.php";
-?>
 
 <head>
     <meta charset="UTF-8" />
@@ -29,14 +28,14 @@ include "function.php";
             index();
         }
     } catch (Exception $e) {
-        $_SESSION["message"] = "Erro ao buscar os times: " . $e->getMessage();
-        $_SESSION["type"] = "danger";
+        definir_msg("Erro ao buscar os times: " . $e->getMessage(), "danger");
     }
 
-    if (!empty($_SESSION['message'])):
+    $msg = obter_msg(); // exibe uma única vez: obter_msg() remove a mensagem da sessão
+    if ($msg):
         ?>
-        <div class="alert alert-<?= $_SESSION['type'] ?> container alertBox alert-dismissible fade show" role="alert">
-            <h2><?= $_SESSION['message'] ?></h2>
+        <div class="alert alert-<?= e($msg['tipo']) ?> container alertBox alert-dismissible fade show" role="alert">
+            <h2><?= e($msg['texto']) ?></h2>
             <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
         </div>
     <?php endif; ?>
@@ -99,31 +98,30 @@ include "function.php";
 
         if ($times !== null) {
             while ($time = array_shift($times)) {
-                $dataFormatCadastro = formatData($time->dataCadastro, 'd/m/Y');
-                $dataFormatFundacao = formatData($time->dataFundacao, 'd/m/Y');
-
-                if (empty($time->foto)) {
-                    $foto = 'placeholder-time.png';
-                } else {
-                    $foto = $time->foto;
-                }
-
-                $id = base64_encode($time->id);
+                // Todo valor vindo do banco é escapado (e()) antes de entrar no HTML, inclusive nos atributos
+                $dataFormatCadastro = e(formatData($time->dataCadastro, 'd/m/Y'));
+                $dataFormatFundacao = e(formatData($time->dataFundacao, 'd/m/Y'));
+                $foto = e(foto_time($time->foto));
+                $nome = e($time->nome);
+                $estado = e($time->estado);
+                $divisao = e($time->divisao);
+                $idTexto = e($time->id);
+                $id = e(base64_encode($time->id));
 
                 echo "<tr>\n
-                  <td><span class=\"fw-bold text-success\">#$time->id</span></td>\n
-                  <td class=\"fw-semibold\">$time->nome</td>\n
+                  <td><span class=\"fw-bold text-success\">#$idTexto</span></td>\n
+                  <td class=\"fw-semibold\">$nome</td>\n
                   <td>$dataFormatFundacao</td>\n
-                  <td>$time->estado</td>\n
-                  <td><span class=\"badge-divisao badge-serie-$time->divisao\">Série $time->divisao</span></td>\n
+                  <td>$estado</td>\n
+                  <td><span class=\"badge-divisao badge-serie-$divisao\">Série $divisao</span></td>\n
                   <td>$dataFormatCadastro</td>\n
                   <td class=\"text-center\">\n
                     <img src=\"../assets/img/$foto\" alt=\"Miniatura do time\" class=\"miniatura\"/>
                   </td>
                   <td class=\"text-center text-nowrap\">
-                    <a href=\"visualizar.php?id=$id\" class=\"btn-acao btn-ver me-1\" data-bs-toggle=\"tooltip\" title=\"Visualizar\" aria-label=\"Visualizar $time->nome\"><i class=\"bi bi-eye-fill\"></i></a>
-                    <a href=\"editar.php?id=$id\" class=\"btn-acao btn-editar me-1\" data-bs-toggle=\"tooltip\" title=\"Editar\" aria-label=\"Editar $time->nome\"><i class=\"bi bi-pencil-fill\"></i></a>
-                    <button type=\"button\" class=\"btn-acao btn-apagar\" data-bs-toggle=\"tooltip\" title=\"Apagar\" aria-label=\"Apagar $time->nome\" onclick=\"abrirModalExcluir('$time->nome', '$id')\"><i class=\"bi bi-trash-fill\"></i></button>
+                    <a href=\"visualizar.php?id=$id\" class=\"btn-acao btn-ver me-1\" data-bs-toggle=\"tooltip\" title=\"Visualizar\" aria-label=\"Visualizar $nome\"><i class=\"bi bi-eye-fill\"></i></a>
+                    <a href=\"editar.php?id=$id\" class=\"btn-acao btn-editar me-1\" data-bs-toggle=\"tooltip\" title=\"Editar\" aria-label=\"Editar $nome\"><i class=\"bi bi-pencil-fill\"></i></a>
+                    <button type=\"button\" class=\"btn-acao btn-apagar\" data-bs-toggle=\"tooltip\" title=\"Apagar\" aria-label=\"Apagar $nome\" data-nome=\"$nome\" data-id=\"$id\"><i class=\"bi bi-trash-fill\"></i></button>
                   </td>
                 </tr>";
             }
@@ -155,12 +153,14 @@ include "function.php";
                     Tem certeza que deseja apagar o time
                     <strong id="nomeExcluir"></strong>? Esta ação não poderá ser
                     desfeita.
+                    <div id="erroExcluir" class="alert alert-danger d-none mt-3 mb-0" role="alert"></div>
                 </div>
                 <div class="modal-footer border-0">
                     <button type="button" class="btn btn-light rounded-3" data-bs-dismiss="modal">
                         Cancelar
                     </button>
-                    <button type="button" class="btn btn-danger rounded-3" id="btnConfirmarExclusao">
+                    <button type="button" class="btn btn-danger rounded-3" id="btnConfirmarExclusao"
+                        data-csrf="<?= e(csrf_token()) ?>">
                         <i class="bi bi-trash me-1"></i>Apagar
                     </button>
                 </div>
@@ -204,7 +204,7 @@ include "function.php";
     </footer>
 
     <script src="<?= BASEURL ?>assets/js/bootstrap.bundle.min.js"></script>
-    <script src="<?= BASEURL ?>assets/js/util.js?v=2"></script>
+    <script src="<?= BASEURL ?>assets/js/util.js?v=3"></script>
 </body>
 
 </html>

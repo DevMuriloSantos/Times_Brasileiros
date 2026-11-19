@@ -1,9 +1,12 @@
+<?php
+include "function.php"; // primeiro: inicia a sessão antes de qualquer saída HTML
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+  csrf_exigir(); // token CSRF antes de qualquer upload ou gravação (403 se inválido)
+}
+?>
 <!DOCTYPE html>
 <html lang="pt-BR">
-
-<?php
-include "function.php";
-?>
 
 <head>
   <meta charset="UTF-8" />
@@ -84,10 +87,18 @@ include "function.php";
         'foto' => $arquivo
       ]);
       $foto = $arquivo;
+
+      // update() registra uma mensagem na sessão; consumi-la aqui evita que reapareça em outra página.
+      // Mantém o alerta azul de sucesso e passa a mostrar o erro quando a atualização falha.
+      $msg = obter_msg();
+      $falhou = $msg && $msg['tipo'] === 'danger';
+      $tipoAlerta = $falhou ? 'danger' : 'info';
+      $textoAlerta = $falhou ? e($msg['texto']) : 'Atualizado com sucesso!';
+
       echo <<<ALERT
-            <div class="alert alert-info alertBox container alert-dismissible fade show" role="alert">
+            <div class="alert alert-{$tipoAlerta} alertBox container alert-dismissible fade show" role="alert">
                 <h2>
-                    Atualizado com sucesso!
+                    {$textoAlerta}
                 </h2>
                 <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                 <a href="../index.php" class="btn btn-primary">Voltar</a>
@@ -95,10 +106,11 @@ include "function.php";
         ALERT;
     }
   } catch (Exception $e) {
+    $mensagemErro = e($e->getMessage());
     echo <<<ALERT
             <div class="alert alert-danger container alert-dismissible fade show" role="alert">
                 <h2>Aconteceu um erro:<br>
-                    {$e->getMessage()}<br>
+                    {$mensagemErro}<br>
                 </h2>\n
                 <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                 <a href="index.php" class="btn btn-primary">Voltar</a>
@@ -124,14 +136,15 @@ include "function.php";
           </div>
           <div class="form-body">
             <?php $id = base64_encode($id) ?>
-            <form action="editar.php?id=<?php echo $id; ?>" id="formEdicao" novalidate enctype="multipart/form-data"
+            <form action="editar.php?id=<?= e($id) ?>" id="formEdicao" novalidate enctype="multipart/form-data"
               method="post" class="needs-validation">
+              <?= csrf_campo() ?>
               <div class="row g-4">
                 <div class="col-lg-7">
                   <div class="mb-3">
                     <label for="nome" class="form-label"><i class="bi bi-shield-fill text-success me-1"></i>Nome do
                       Time</label>
-                    <input type="text" class="form-control" id="nome" name="nome" value="<?php echo $nome; ?>"
+                    <input type="text" class="form-control" id="nome" name="nome" value="<?= e($nome ?? '') ?>"
                       required />
                     <div class="invalid-feedback">Informe o nome do time.</div>
                   </div>
@@ -139,7 +152,7 @@ include "function.php";
                     <label for="fundacao" class="form-label"><i class="bi bi-calendar-event text-success me-1"></i>Data
                       de Fundação</label>
                     <input type="date" class="form-control" id="fundacao" name="fundacao" required
-                      value="<?php echo $dataFormatFundacao; ?>" min="1900-01-01" max="<?php echo date("Y-m-d"); ?>" />
+                      value="<?= e($dataFormatFundacao ?? '') ?>" min="1900-01-01" max="<?php echo date("Y-m-d"); ?>" />
                     <div class="invalid-feedback">Informe a data de fundação.</div>
                   </div>
                   <div class="mb-3">
@@ -163,7 +176,7 @@ include "function.php";
                   <label for="imagem" class="form-label"><i class="bi bi-image-fill text-success me-1"></i>Miniatura do
                     Time</label>
                   <div class="preview-box mb-2">
-                    <img src="../assets/img/<?php echo $foto; ?>" alt="Pré-visualização da imagem do time"
+                    <img src="../assets/img/<?= e(foto_time($foto ?? '')) ?>" alt="Pré-visualização da imagem do time"
                       id="previewImg" />
                   </div>
                   <input type="file" class="form-control" id="imagem" name="imagemNova" accept="image/*" />
@@ -196,8 +209,8 @@ include "function.php";
   <script type="module" src="<?= BASEURL ?>assets/js/formulario.js"></script>
   <script src="<?= BASEURL ?>assets/js/data.js"></script>
   <script>
-    preencherEstados(document.getElementById('estado'), "<?php echo $estado; ?>");
-    preencherCategorias(document.getElementById('divisao'), "<?php echo "Série $divisao"; ?>");
+    preencherEstados(document.getElementById('estado'), <?= js_str($estado ?? '') ?>);
+    preencherCategorias(document.getElementById('divisao'), <?= js_str('Série ' . (is_scalar($divisao ?? null) ? $divisao : '')) ?>);
   </script>
 </body>
 

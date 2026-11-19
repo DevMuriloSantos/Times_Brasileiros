@@ -15,6 +15,19 @@ CREATE TABLE IF NOT EXISTS tabela_time (
   foto varchar(50)
 ) DEFAULT CHARSET=utf8 AUTO_INCREMENT=6;
 
+-- Script para criar e cadastrar na tabela usuários (execute no banco do projeto):
+CREATE TABLE usuarios(
+    id int AUTO_INCREMENT not null PRIMARY KEY,
+    nome varchar(50) not null,
+    user varchar(50) not null,
+    password varchar(255) not null,
+    foto varchar(50)
+);
+INSERT INTO usuarios (nome, user, password) 
+VALUES ('Zé Lele','zelele','5243897562837456982'),
+('Mary Zica','mazi','786098767869'),
+('Fugiru Nakombi','fugina','623485634753234');
+
 INSERT INTO tabela_time (id, nome, dataFundacao, estado, divisao, dataCadastro, foto)
 VALUES
 (1, 'Corinthians', '1910-09-01', 'São Paulo', 'A', '2026-06-14 10:15:00', 'miniatura_corinthians.png'),
